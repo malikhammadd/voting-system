@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #357abd;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #4a90e2;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔌 API Connection Test</h1>
+    <p>Use this page to test if the backend API is running and accessible.</p>
+
+    <div class="test-section">
+        <h2>1. Test Backend Connection</h2>
+        <button onclick="testConnection()">Test Connection</button>
+        <div id="connectionResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Get All Candidates</h2>
+        <button onclick="getCandidates()">Get Candidates</button>
+        <div id="candidatesResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Get Voting Stats</h2>
+        <button onclick="getStats()">Get Stats</button>
+        <div id="statsResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Get Vote Results</h2>
+        <button onclick="getResults()">Get Results</button>
+        <div id="resultsResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        async function testConnection() {
+            const resultDiv = document.getElementById('connectionResult');
+            resultDiv.textContent = 'Testing...';
+            resultDiv.className = 'result';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/candidates`);
+                if (response.ok) {
+                    resultDiv.textContent = '✅ Backend is running and accessible!';
+                    resultDiv.className = 'result success';
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Connection failed: ${error.message}\n\nMake sure:\n- Backend is running on port 8080\n- Run: mvn spring-boot:run`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function getCandidates() {
+            const resultDiv = document.getElementById('candidatesResult');
+            resultDiv.textContent = 'Loading...';
+            resultDiv.className = 'result';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/candidates`);
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function getStats() {
+            const resultDiv = document.getElementById('statsResult');
+            resultDiv.textContent = 'Loading...';
+            resultDiv.className = 'result';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/voting/stats`);
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function getResults() {
+            const resultDiv = document.getElementById('resultsResult');
+            resultDiv.textContent = 'Loading...';
+            resultDiv.className = 'result';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/voting/results`);
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = testConnection;
+    </script>
+</body>
+</html>

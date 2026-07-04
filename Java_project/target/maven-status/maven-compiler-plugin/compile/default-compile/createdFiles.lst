@@ -1,0 +1,13 @@
+com\votingapp\dto\VoteRequest.class
+com\votingapp\model\Candidate.class
+com\votingapp\model\Vote.class
+com\votingapp\repository\VoterRepository.class
+com\votingapp\VotingApplication.class
+com\votingapp\service\VotingService.class
+com\votingapp\repository\VoteRepository.class
+com\votingapp\config\CorsConfig.class
+com\votingapp\model\Voter.class
+com\votingapp\controller\CandidateController.class
+com\votingapp\controller\VotingController.class
+com\votingapp\repository\CandidateRepository.class
+com\votingapp\dto\VoteResult.class
